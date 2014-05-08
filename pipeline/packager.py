@@ -59,6 +59,10 @@ class Package(object):
     def manifest(self):
         return self.config.get('manifest', True)
 
+    @property
+    def compress_group(self):
+        return self.config.get('compress_group', True)
+
 
 class Packager(object):
     def __init__(self, storage=default_storage, verbose=False, css_packages=None, js_packages=None):
@@ -101,7 +105,7 @@ class Packager(object):
         if self.verbose:
             print("Saving: %s" % output_filename)
         paths = self.compile(package.paths, force=True)
-        content = compress(paths, **kwargs)
+        content = compress(paths, compress_group=package.compress_group, **kwargs)
         self.save_file(output_filename, content)
         signal.send(sender=self, package=package, **kwargs)
         return output_filename
