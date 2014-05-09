@@ -67,18 +67,22 @@ class Compressor(object):
 
         return js
 
-    def compress_css(self, paths, output_filename, variant=None, **kwargs):
+    def compress_css(self, paths, output_filename, variant=None, compress_group=True, **kwargs):
         """Concatenate and compress CSS files"""
         css = self.concatenate_and_rewrite(paths, output_filename, variant)
-        compressor = self.css_compressor
-        if compressor:
-            css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
-        if not variant:
-            return css
-        elif variant == "datauri":
-            return self.with_data_uri(css)
+
+        if compress_group:
+            compressor = self.css_compressor
+            if compressor:
+                css = getattr(compressor(verbose=self.verbose), 'compress_css')(css)
+            if not variant:
+                return css
+            elif variant == "datauri":
+                return self.with_data_uri(css)
+            else:
+                raise CompressorError("\"%s\" is not a valid variant" % variant)
         else:
-            raise CompressorError("\"%s\" is not a valid variant" % variant)
+            return css
 
     def compile_templates(self, paths):
         compiled = []
