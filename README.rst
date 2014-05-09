@@ -10,7 +10,7 @@ Installation
 
 To install it, simply: ::
 
-    pip install django-pipeline
+    pip install git+https://github.com/philroche/django-pipeline.git@2b4b31e0356ff0850f86f7a6e1518ce3e26d030b#egg=django-pipeline
 
 
 Documentation
